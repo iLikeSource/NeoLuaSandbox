@@ -58,6 +58,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Models.fs" />
     <Compile Include="Sandbox.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
