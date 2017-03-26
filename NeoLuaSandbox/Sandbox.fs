@@ -38,6 +38,7 @@ let testFunction () =
     let result  = g.DoChunk ("return t.f1(10.0);", "test.lua")
     System.Convert.ToDouble result.[0]
 
+(*
 /// オブジェクトを生成して返す
 type CmdNode   = delegate of string * float * float * float -> unit 
 type CmdMember = delegate of string * (string array) -> unit
@@ -68,7 +69,47 @@ return 1;
     let _ = g.DoChunk (script, "object.lua")
     let node   = model.Nodes |> Map.find "n1"
     ()   
+*)
 
+///  ファイルから読み込み
+type CmdNode   = delegate of float * float * float -> unit 
+type CmdMember = delegate of int * int -> unit
+let testUtility () = 
+    use reader  = new System.IO.StreamReader ("util.lua")
+    let t       = new LuaTable ()
+    let code    = reader.ReadToEnd ()
+    let model   = Models.Model.Create ()
+    let cmdNode = 
+        new CmdNode (fun x y z -> model.AddNode (x, y, z))
+    
+    let cmdMember = 
+        new CmdMember (fun nodeId1 nodeId2 -> 
+            model.AddMember (nodeId1, nodeId2)
+        )
+    
+    let _ = t.DefineFunction ("cmdNode"  , cmdNode)
+    let _ = t.DefineFunction ("cmdMember", cmdMember)
+    let l = new Lua ()
+    let g = l.CreateEnvironment ()
+    g.["cmd"] <- t
+    let mainCode = """
+node({ name="n1", x=1.0, y=2.0, z=10.0}); 
+node({ name="n2", x=3.0, y=2.0, z=10.0}); 
+node({ name="n3", x=3.0, y=4.0, z=10.0}); 
+member({ name="m1", nodes={"n1","n2"}});
+member({ name="m2", nodes={"n1","n3"}});
+
+convertNodes( cmd );
+convertMembers( cmd );
+
+    """
+    let result  = g.DoChunk (code + "\r\n" + mainCode, "usingUtil.lua")
+    let node1   = model.Nodes.[1]
+    let node2   = model.Nodes.[2]
+    let member1 = model.Members.[1]
+    let member2 = model.Members.[2]
+    ()   
+    
 
 
     
