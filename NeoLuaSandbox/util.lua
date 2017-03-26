@@ -18,6 +18,19 @@ function member(tbl)
 	memberIdTable[ tbl.name ] = #memberTable
 end;
 
+-- member length.
+function length(member) 
+	local node1 = nodeTable[ nodeIdTable[ member.nodes[1] ] ];
+	local node2 = nodeTable[ nodeIdTable[ member.nodes[2] ] ];
+	local x1 = node1.x;
+	local y1 = node1.y;
+	local z1 = node1.y;
+	local x2 = node2.x;
+	local y2 = node2.y;
+	local z2 = node2.y;
+	return ((x1 - x2) ^ 2.0 + (y1 - y2) ^ 2.0 + (z1 - z2) ^ 2.0) ^ 0.5;
+end;
+
 
 function convertNode(cmdTbl, node)
 	cmdTbl.cmdNode(node.x, node.y, node.z);

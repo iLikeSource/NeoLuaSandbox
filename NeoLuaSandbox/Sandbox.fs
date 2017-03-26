@@ -71,6 +71,17 @@ return 1;
     ()   
 *)
 
+///  Luaからテーブルで返してもらった値を取り扱う
+let testTableReturn () = 
+    let l = new Lua ()
+    let g = l.CreateEnvironment ()
+    let result  = g.DoChunk ("return { { 1, 1, 12.0 }, { 1, 1, 1.0 } };", "test.lua")
+    let luaTable = result.[0] :?> LuaTable;
+    let a = luaTable.[1]
+    let b = luaTable.[2]
+    () 
+    
+
 ///  ファイルから読み込み
 type CmdNode   = delegate of float * float * float -> unit 
 type CmdMember = delegate of int * int -> unit

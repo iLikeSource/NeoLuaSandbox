@@ -7,5 +7,6 @@ let main argv =
     //let x = Sandbox.testFunction ()
     //let x = Sandbox.testFromFile (1.0, 2.0, 3.0)
     //let y = Sandbox.testFromFile (10.0, 2.0, 3.0)
-    let x = Sandbox.testUtility ()
+    //let x = Sandbox.testUtility ()
+    let x = Sandbox.testTableReturn ()
     0 // 整数の終了コードを返します
